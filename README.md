@@ -33,3 +33,12 @@ Basic:
     - [x] doubly-linked-list
 
 Advanced:
+- [ ] Main Goal: Complete all Advanced data structures with 3 unique tests foe each structure.
+  - [ ] src code:
+    - [ ] Hash table
+    - [ ] Binary Tree
+    - [ ] Directed Graph
+  - [ ] test code:
+    - [ ] Hash table
+    - [ ] Binary Tree
+    - [ ] Directed Graph
