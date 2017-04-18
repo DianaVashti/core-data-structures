@@ -158,9 +158,9 @@ export default class HashTable {
     const table = this.table
     const hashedKey = hash(key)
 
-    if( this.length = 0 ){
+    if( this.length === null ){
       table.hashedKey = node
-      return this.length = 1
+      return this.length++
     } else {
       if( hash(key) in this.table ){
         const collisionNode =
