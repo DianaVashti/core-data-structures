@@ -246,7 +246,7 @@ describe('LinkedList', () => {
     })
   })
 
-  context.only('removeWithFind(data)', () => {
+  context('removeWithFind(data)', () => {
     it('removes the searched node using find', () => {
       const myLinkedList = new LinkedList()
 

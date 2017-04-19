@@ -44,8 +44,39 @@ export default class LinkedList {
       } else {
         currentNode = currentNode.next
       }
+    } return false
+  }
+
+//find but return the value
+  findButReturnValue(key) {
+    var currentNode = this.head
+    if (!currentNode) {
+      return null
+    }
+    while (currentNode) {
+      if (currentNode.key === key){
+        return currentNode.value
+      } else {
+        currentNode = currentNode.next
+      }
     } return -1
   }
+
+//see if linked list contains key
+  contains(key) {
+    var currentNode = this.head
+    if (!currentNode) {
+      return null
+    }
+    while (currentNode) {
+      if (currentNode.key === key){
+        return true
+      } else {
+        currentNode = currentNode.next
+      }
+    } return false
+  }
+
 
 //finds the node whose next value is the target node
   findByNext(key) {
@@ -94,6 +125,7 @@ export default class LinkedList {
       return this.length--
     }
   }
+
 //brute force
   removeIt(key) {
     let currentNode = this.head
@@ -155,33 +187,46 @@ export default class HashTable {
     // adds a key-value pair to the hash table, deal with collisions using chaining
   put(key, value) {
     const node = new Node(key, value)
+    const linkedList = new LinkedList()
     const table = this.table
     const hashedKey = hash(key)
 
-    if( this.length === null ){
-      table.hashedKey = node
+    if( !(hashedKey in table) ) {
+      table.hashedKey = linkedList.insert(key, value)
       return this.length++
     } else {
-      if( hash(key) in this.table ){
-        const collisionNode =
-
-      } else {
-        table.hashedKey = node
-        return this.length++
-      }
+      let collidingLinkedList = table[hashedKey]
+      collidingLinkedList.insert(node)
+      return this.length++
     }
   }
 
   //ht.get("name")
     // returns the key associated with key.
-  get() {
+  get(key) {
+    const table = this.table
+    const hashedKey = hash(key)
 
+    if(!(hashedKey in table)){
+      return -1
+    } else {
+      let linkedListValue = table[hashedKey]
+      return linkedListValue.findButReturnValue(key)
+    }
   }
 
   //ht.contains("name")
     // returns true if the hash table contains the key.
-  contains() {
+  contains(key) {
+    const table = this.table
+    const hashedKey = hash(key)
 
+    if(!(hashedKey in table)){
+      return false
+    } else {
+      let linkedListValue = table[hashedKey]
+      return linkedListValue.contains(key)
+    }
   }
 
   //ht.iterate((k, v) => console.log(`${k}: ${v}`))
@@ -193,7 +238,16 @@ export default class HashTable {
   //ht.remove("name")
     // removes a key-value pair by key.
   remove(key){
+    const table = this.table
+    const hashedKey = hash(key)
 
+    if(!(hashedKey in table)){
+      return false
+    } else {
+      let linkedListValue = table[hashedKey]
+      linkedListValue.removeIt(key)
+      return this.length--
+    }
   }
 
 }
