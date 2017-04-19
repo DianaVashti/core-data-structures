@@ -48,7 +48,9 @@ const LinkedList = class LinkedList {
 //find but return the value
   findButReturnValue(key) {
     const node = this.find(key)
-    return node ? node.value : null
+    return node
+      ? node.value
+      : null
   }
 
 //see if linked list contains key
@@ -111,12 +113,7 @@ export default class HashTable {
   //ht.iterate((k, v) => console.log(`${k}: ${v}`))
     // takes a callback function and passes it each key and value in sequence.
   iterate( callback ){
-    let table = this.table
-    let arrayOfKeys = Object.keys(table)
-
-    for( let i = 0; i < arrayOfKeys.length; i++ ){
-      callback( arrayOfKeys[i], table[arrayOfKeys[i]] )
-    }
+    Object.keys(this.table).forEach( key => { callback(key, this.table[key]) })
   }
 
   //ht.hash("name")
