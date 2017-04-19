@@ -4,7 +4,7 @@ function Node(key, value) {
   this.next = null
 }
 
-export default class LinkedList {
+const LinkedList = class LinkedList {
   constructor() {
     this.length = 0
     this.head = null
@@ -41,40 +41,19 @@ export default class LinkedList {
     while (currentNode) {
       if (currentNode.key === key){
         return currentNode
-      } else {
-        currentNode = currentNode.next
       }
     } return false
   }
 
 //find but return the value
   findButReturnValue(key) {
-    var currentNode = this.head
-    if (!currentNode) {
-      return null
-    }
-    while (currentNode) {
-      if (currentNode.key === key){
-        return currentNode.value
-      } else {
-        currentNode = currentNode.next
-      }
-    } return -1
+    const node = this.find(key)
+    return node ? node.value : null
   }
 
 //see if linked list contains key
   contains(key) {
-    var currentNode = this.head
-    if (!currentNode) {
-      return null
-    }
-    while (currentNode) {
-      if (currentNode.key === key){
-        return true
-      } else {
-        currentNode = currentNode.next
-      }
-    } return false
+    return !!this.find(key)
   }
 
 
@@ -100,24 +79,8 @@ export default class LinkedList {
 //cleaner remove using findByNext
   removeWithFindByNext(key) {
     let currentNode = this.head
+    let foundNode = this.findByNext(key)
 
-    const findByNext = function(key) {
-      if(!currentNode) {
-        return null
-      } else if (!currentNode.next && currentNode.key === key){
-        return clear()
-      } else {
-        while(currentNode.next){
-          if(currentNode.next.key === key){
-            return currentNode
-          } else {
-            currentNode = currentNode.next
-          }
-        } return null
-      }
-    }
-
-    let foundNode = findByNext(key)
     if (foundNode === null){
       return null
     } else {
@@ -128,31 +91,13 @@ export default class LinkedList {
 
 //brute force
   removeIt(key) {
-    let currentNode = this.head
-
-    if(!currentNode){
-      return null
-    } else {
-      while(currentNode){
-        if(currentNode.key === key){
-          if(!currentNode.next){
-            this.head = null
-            return this.length--
-          } else {
-            currentNode = currentNode.next
-            this.length--
-            return this.head = currentNode
-          }
-        } else if (currentNode.next.key === key){
-          currentNode.next = currentNode.next.next
-          return this.length--
-        } else if (currentNode.next !== null){
-          currentNode = currentNode.next
-        } else {
-          return null
-        }
-      }
+    const previousNode = this.findByNext(key)
+    if (previousNode){
+      const node = prevNode.next
+      previousNode.next = node.next
+      return node
     }
+    return null
   }
 
 }
@@ -163,16 +108,26 @@ export default class HashTable {
     this.table = {}
   }
 
+  //ht.iterate((k, v) => console.log(`${k}: ${v}`))
+    // takes a callback function and passes it each key and value in sequence.
+  iterate( callback ){
+    let table = this.table
+    let arrayOfKeys = Object.keys(table)
+
+    for( let i = 0; i < arrayOfKeys.length; i++ ){
+      callback( arrayOfKeys[i], table[arrayOfKeys[i]] )
+    }
+  }
+
   //ht.hash("name")
     // generates a hash for the key "name"
   hash( str ) {
-    const inputString = str
-    const strToArray = inputString.toLowerCase().split('')
-    const alphabit = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    const lowerCaseString = str.toLowerCase()
+    const alphabit = Array(26).fill().map((_, index) => String.fromCharCode(index + 97))
     const hashed = []
 
-    for( var i = 0; i < strToArray.length; i++ ){
-      hashed.push(alphabit.indexOf(strToArray[i]) * (i + 1) * 13)
+    for( var i = 0; i < lowerCaseString.length; i++ ){
+      hashed.push(alphabit.indexOf(lowerCaseString[i]) * (i + 1) * 107)
     }
     return ( hashed.reduce(( a,b ) => a + b, 0 ) % 101 )
   }
@@ -186,17 +141,16 @@ export default class HashTable {
   //ht.put("name", "Zanzibar")
     // adds a key-value pair to the hash table, deal with collisions using chaining
   put(key, value) {
-    const node = new Node(key, value)
+    const node = new Node( key, value )
     const linkedList = new LinkedList()
     const table = this.table
-    const hashedKey = hash(key)
+    const hashedKey = hash( key )
 
     if( !(hashedKey in table) ) {
       table.hashedKey = linkedList.insert(key, value)
       return this.length++
     } else {
-      let collidingLinkedList = table[hashedKey]
-      collidingLinkedList.insert(node)
+      table[hashedKey].insert(node)
       return this.length++
     }
   }
@@ -218,21 +172,10 @@ export default class HashTable {
   //ht.contains("name")
     // returns true if the hash table contains the key.
   contains(key) {
-    const table = this.table
-    const hashedKey = hash(key)
-
-    if(!(hashedKey in table)){
-      return false
-    } else {
-      let linkedListValue = table[hashedKey]
-      return linkedListValue.contains(key)
-    }
-  }
-
-  //ht.iterate((k, v) => console.log(`${k}: ${v}`))
-    // takes a callback function and passes it each key and value in sequence.
-  iterate(){
-
+    const linkedList = this.table[hash(key)]
+    return linkedList
+      ? linkedList.contains(key)
+      : false
   }
 
   //ht.remove("name")
