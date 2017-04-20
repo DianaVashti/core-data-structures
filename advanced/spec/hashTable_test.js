@@ -83,6 +83,7 @@ describe('HashTable', () => {
       const ht = new HashTable()
       ht.put("Azazel", "Demon")
       expect(ht.size()).to.equal(1)
+      console.log("HT TABLE", ht.table[ht.hash('Beelzebub')])
       expect(ht.contains("Beelzebub")).to.be.false
     })
   })
@@ -107,7 +108,5 @@ describe('HashTable', () => {
       ht.iterate((k, v) => console.log(`${k}: ${v}`))
     })
   })
-
-
 
 })

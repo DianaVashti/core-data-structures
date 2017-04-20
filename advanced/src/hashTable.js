@@ -29,17 +29,17 @@ const LinkedList = class LinkedList {
   }
 
 //regular find
-  // find(key) {
-  //   var currentNode = this.head
-  //   if (!currentNode) {
-  //     return null
-  //   }
-  //   while (currentNode) {
-  //     if (currentNode.key === key){
-  //       return currentNode
-  //     }
-  //   } return false
-  // }
+  find(key) {
+    var currentNode = this.head
+    if (!currentNode) {
+      return false
+    }
+    while (currentNode) {
+      if (currentNode.key === key){
+        return currentNode
+      }
+    } return false
+  }
 
 //find but return the value
   findButReturnValue(key) {
@@ -54,6 +54,11 @@ const LinkedList = class LinkedList {
     return !!this.find(key)
   }
 
+//clears my linked list
+  clear() {
+    this.length = 0
+    this.head = null
+  }
 
 //finds the node whose next value is the target node
   findByNext(key) {
@@ -62,7 +67,7 @@ const LinkedList = class LinkedList {
     if(!currentNode) {
       return null
     } else if (!currentNode.next && currentNode.key === key){
-      return clear()
+      return this.clear()
     } else {
       while(currentNode.next){
         if(currentNode.next.key === key){
@@ -88,43 +93,43 @@ const LinkedList = class LinkedList {
   // }
 
 //brute force
-  // removeIt(key) {
-  //   const previousNode = this.findByNext(key)
-  //   if (previousNode){
-  //     const node = prevNode.next
-  //     previousNode.next = node.next
-  //     return node
-  //   }
-  //   return null
-  // }
-
-  removeBy(data) {
-    let currentNode = this.head
-
-    if(!currentNode){
-      return null
-    } else {
-      while(currentNode){
-        if(currentNode.data === data){
-          if(!currentNode.next){
-            this.head = null
-            return this.length--
-          } else {
-            currentNode = currentNode.next
-            this.length--
-            return this.head = currentNode
-          }
-        } else if (currentNode.next.data === data){
-          currentNode.next = currentNode.next.next
-          return this.length--
-        } else if (currentNode.next !== null){
-          currentNode = currentNode.next
-        } else {
-          return alert("no such node exists")
-        }
-      }
+  removeBy(key) {
+    const previousNode = this.findByNext(key)
+    if (previousNode){
+      const node = prevNode.next
+      previousNode.next = node.next
+      return node
     }
+    return null
   }
+
+  // removeBy(data) {
+  //   let currentNode = this.head
+  //
+  //   if(!currentNode){
+  //     return null
+  //   } else {
+  //     while(currentNode){
+  //       if(currentNode.data === data){
+  //         if(!currentNode.next){
+  //           this.head = null
+  //           return this.length--
+  //         } else {
+  //           currentNode = currentNode.next
+  //           this.length--
+  //           return this.head = currentNode
+  //         }
+  //       } else if (currentNode.next.data === data){
+  //         currentNode.next = currentNode.next.next
+  //         return this.length--
+  //       } else if (currentNode.next !== null){
+  //         currentNode = currentNode.next
+  //       } else {
+  //         return alert("no such node exists")
+  //       }
+  //     }
+  //   }
+  // }
 
 }
 
@@ -167,30 +172,28 @@ export default class HashTable {
     // adds a key-value pair to the hash table, deal with collisions using chaining
   put(key, value) {
     const node = new Node( key, value )
-    const linkedList = new LinkedList()
-    const table = this.table
     const hashedKey = this.hash( key )
 
-    if( !(hashedKey in table) ) {
-      table[hashedKey] = linkedList.insert(key, value)
-      return this.length++
+    if( !(hashedKey in this.table) ) {
+      const linkedList = new LinkedList()
+      linkedList.insert(key, value)
+      this.table[hashedKey] = linkedList
     } else {
-      table[hashedKey].insert(node)
-      return this.length++
+      this.table[hashedKey].insert(node)
     }
+    return this.length++
   }
 
   //ht.get("name")
     // returns the value associated with key.
   get(key) {
-    const table = this.table
     const hashedKey = this.hash(key)
 
-    if(!(hashedKey in table)){
+    if(!(hashedKey in this.table)){
       return -1
     } else {
-      const linkedListValue = table[hashedKey]
-      return linkedListValue.value
+      const linkedListValue = this.table[hashedKey]
+      return linkedListValue.findButReturnValue(key)
     }
   }
 
@@ -198,27 +201,25 @@ export default class HashTable {
     // returns true if the hash table contains the key.
   contains(key) {
     const linkedList = this.table[this.hash(key)]
-    return linkedList
-      ? true
-      : false
+    if(!linkedList){
+      return false
+    } else {
+      return linkedList.has(key)
+    }
   }
 
   //ht.remove("name")
     // removes a key-value pair by key.
   remove(key){
-    const table = this.table
     const hashedKey = this.hash(key)
     // const linkedList = this.table[this.hash(key)]
     // console.log('+++++++++->', linkedList)
 
-    if(!(hashedKey in table)){
+    if(!(hashedKey in this.table)){
       return false
     } else {
-      // const linkedList = this.table[this.hash(key)]
       const linkedList = this.table[this.hash(key)]
-      console.log('+++++++++->', linkedList)
-      console.log('--------->', linkedList.key)
-      this.LinkedList.removeBy(linkedList.key)
+      linkedList.removeBy(key)
       return this.length--
     }
   }
