@@ -4,16 +4,17 @@ function Node(key, value) {
   this.next = null
 }
 
+
 const LinkedList = class LinkedList {
   constructor() {
     this.length = 0
     this.head = null
   }
 
-  clear() {
-    this.length = 0
-    this.head = null
-  }
+  // clear() {
+  //   this.length = 0
+  //   this.head = null
+  // }
 
   insert(key, value) {
     let node = new Node(key, value)
@@ -33,17 +34,17 @@ const LinkedList = class LinkedList {
   }
 
 //regular find
-  find(key) {
-    var currentNode = this.head
-    if (!currentNode) {
-      return null
-    }
-    while (currentNode) {
-      if (currentNode.key === key){
-        return currentNode
-      }
-    } return false
-  }
+  // find(key) {
+  //   var currentNode = this.head
+  //   if (!currentNode) {
+  //     return null
+  //   }
+  //   while (currentNode) {
+  //     if (currentNode.key === key){
+  //       return currentNode
+  //     }
+  //   } return false
+  // }
 
 //find but return the value
   findButReturnValue(key) {
@@ -54,7 +55,7 @@ const LinkedList = class LinkedList {
   }
 
 //see if linked list contains key
-  contains(key) {
+  has(key) {
     return !!this.find(key)
   }
 
@@ -79,17 +80,17 @@ const LinkedList = class LinkedList {
   }
 
 //cleaner remove using findByNext
-  removeWithFindByNext(key) {
-    let currentNode = this.head
-    let foundNode = this.findByNext(key)
-
-    if (foundNode === null){
-      return null
-    } else {
-      foundNode.next = foundNode.next.next
-      return this.length--
-    }
-  }
+  // removeWithFindByNext(key) {
+  //   let currentNode = this.head
+  //   let foundNode = this.findByNext(key)
+  //
+  //   if (foundNode === null){
+  //     return null
+  //   } else {
+  //     foundNode.next = foundNode.next.next
+  //     return this.length--
+  //   }
+  // }
 
 //brute force
   removeIt(key) {
@@ -119,14 +120,18 @@ export default class HashTable {
   //ht.hash("name")
     // generates a hash for the key "name"
   hash( str ) {
-    const lowerCaseString = str.toLowerCase()
-    const alphabit = Array(26).fill().map((_, index) => String.fromCharCode(index + 97))
-    const hashed = []
+    if( !(typeof str === "string") ){
+      return null
+    } else {
+      const lowerCaseString = str.toLowerCase()
+      const alphabit = Array(26).fill().map((_, index) => String.fromCharCode(index + 97))
+      const hashed = []
 
-    for( var i = 0; i < lowerCaseString.length; i++ ){
-      hashed.push(alphabit.indexOf(lowerCaseString[i]) * (i + 1) * 107)
+      for( var i = 0; i < lowerCaseString.length; i++ ){
+        hashed.push(alphabit.indexOf(lowerCaseString[i]) * (i + 1) * 107)
+      }
+      return ( hashed.reduce(( a,b ) => a + b, 0 ) % 101 )
     }
-    return ( hashed.reduce(( a,b ) => a + b, 0 ) % 101 )
   }
 
   //ht.size()
@@ -141,10 +146,10 @@ export default class HashTable {
     const node = new Node( key, value )
     const linkedList = new LinkedList()
     const table = this.table
-    const hashedKey = hash( key )
+    const hashedKey = this.hash( key )
 
     if( !(hashedKey in table) ) {
-      table.hashedKey = linkedList.insert(key, value)
+      table[hashedKey] = linkedList.insert(key, value)
       return this.length++
     } else {
       table[hashedKey].insert(node)
@@ -153,25 +158,25 @@ export default class HashTable {
   }
 
   //ht.get("name")
-    // returns the key associated with key.
+    // returns the value associated with key.
   get(key) {
     const table = this.table
-    const hashedKey = hash(key)
+    const hashedKey = this.hash(key)
 
     if(!(hashedKey in table)){
       return -1
     } else {
-      let linkedListValue = table[hashedKey]
-      return linkedListValue.findButReturnValue(key)
+      const linkedListValue = table[hashedKey]
+      return linkedListValue.value
     }
   }
 
   //ht.contains("name")
     // returns true if the hash table contains the key.
   contains(key) {
-    const linkedList = this.table[hash(key)]
+    const linkedList = this.table[this.hash(key)]
     return linkedList
-      ? linkedList.contains(key)
+      ? LinkedList.has(key)
       : false
   }
 
