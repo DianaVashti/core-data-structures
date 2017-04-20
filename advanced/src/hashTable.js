@@ -11,11 +11,6 @@ const LinkedList = class LinkedList {
     this.head = null
   }
 
-  // clear() {
-  //   this.length = 0
-  //   this.head = null
-  // }
-
   insert(key, value) {
     let node = new Node(key, value)
     let currentNode = this.head
@@ -93,14 +88,42 @@ const LinkedList = class LinkedList {
   // }
 
 //brute force
-  removeIt(key) {
-    const previousNode = this.findByNext(key)
-    if (previousNode){
-      const node = prevNode.next
-      previousNode.next = node.next
-      return node
+  // removeIt(key) {
+  //   const previousNode = this.findByNext(key)
+  //   if (previousNode){
+  //     const node = prevNode.next
+  //     previousNode.next = node.next
+  //     return node
+  //   }
+  //   return null
+  // }
+
+  removeBy(data) {
+    let currentNode = this.head
+
+    if(!currentNode){
+      return null
+    } else {
+      while(currentNode){
+        if(currentNode.data === data){
+          if(!currentNode.next){
+            this.head = null
+            return this.length--
+          } else {
+            currentNode = currentNode.next
+            this.length--
+            return this.head = currentNode
+          }
+        } else if (currentNode.next.data === data){
+          currentNode.next = currentNode.next.next
+          return this.length--
+        } else if (currentNode.next !== null){
+          currentNode = currentNode.next
+        } else {
+          return alert("no such node exists")
+        }
+      }
     }
-    return null
   }
 
 }
@@ -176,7 +199,7 @@ export default class HashTable {
   contains(key) {
     const linkedList = this.table[this.hash(key)]
     return linkedList
-      ? LinkedList.has(key)
+      ? true
       : false
   }
 
@@ -184,13 +207,18 @@ export default class HashTable {
     // removes a key-value pair by key.
   remove(key){
     const table = this.table
-    const hashedKey = hash(key)
+    const hashedKey = this.hash(key)
+    // const linkedList = this.table[this.hash(key)]
+    // console.log('+++++++++->', linkedList)
 
     if(!(hashedKey in table)){
       return false
     } else {
-      let linkedListValue = table[hashedKey]
-      linkedListValue.removeIt(key)
+      // const linkedList = this.table[this.hash(key)]
+      const linkedList = this.table[this.hash(key)]
+      console.log('+++++++++->', linkedList)
+      console.log('--------->', linkedList.key)
+      this.LinkedList.removeBy(linkedList.key)
       return this.length--
     }
   }
