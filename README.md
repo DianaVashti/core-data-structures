@@ -11,7 +11,9 @@ Install: ~ npm i
 
 Build: ~ npm run build
 
-Test: ~npm test
+Test basic: ~ npm run test:basic
+
+Test Advanced: ~ npm run test:advanced 
 
 ## Details
 Basic:
@@ -35,11 +37,11 @@ Basic:
 Advanced:
 - [ ] Main Goal: Complete all Advanced data structures with 3 unique tests foe each structure.
   - [ ] src code:
-    - [ ] Hash table
+    - [x] Hash table
     - [ ] Binary Tree
     - [ ] Directed Graph
-    
+
   - [ ] test code:
-    - [ ] Hash table
+    - [x] Hash table
     - [ ] Binary Tree
-    - [ ] Directed Graph
+    - [x] Directed Graph
