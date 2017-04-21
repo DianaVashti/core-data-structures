@@ -220,4 +220,44 @@ describe('LinkedList', () => {
     })
   })
 
+  context('removeBy(data)', () => {
+    it('removes a node by the provided search data', () => {
+      const myLinkedList = new LinkedList()
+      myLinkedList.insert("Azazel")
+      myLinkedList.insert("Beelzebub")
+      myLinkedList.insert("Choronzon")
+      myLinkedList.insert("Demogorgon")
+      expect(myLinkedList.size()).to.deep.equal(4)
+      myLinkedList.removeBy("Beelzebub")
+      expect(myLinkedList.size()).to.deep.equal(3)
+      expect(myLinkedList.getTailNode()).to.deep.equal({data: "Demogorgon", next: null})
+    })
+  })
+
+  context('findByNext(data)', () => {
+    it('finds the node whose next value is equal to the input', () => {
+      const myLinkedList = new LinkedList()
+      myLinkedList.insert("Azazel")
+      myLinkedList.insert("Beelzebub")
+      myLinkedList.insert("Choronzon")
+      myLinkedList.insert("Demogorgon")
+      expect(myLinkedList.size()).to.deep.equal(4)
+      expect(myLinkedList.findByNext("Demogorgon")).to.deep.equal({data: "Choronzon", next: {data: "Demogorgon", next: null}})
+    })
+  })
+
+  context('removeWithFind(data)', () => {
+    it('removes the searched node using find', () => {
+      const myLinkedList = new LinkedList()
+
+      myLinkedList.insert("Azazel")
+      myLinkedList.insert("Beelzebub")
+      myLinkedList.insert("Choronzon")
+      myLinkedList.insert("Demogorgon")
+      myLinkedList.removeWithFind("Choronzon")
+      expect(myLinkedList.size()).to.deep.equal(3)
+      expect(myLinkedList.getTailNode()).to.deep.equal({data: "Demogorgon", next: null})
+    })
+  })
+
 })

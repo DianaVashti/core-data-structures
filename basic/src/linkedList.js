@@ -45,7 +45,6 @@ export default class LinkedList {
   }
 
   contains(data) {
-    var node = new Node(data)
     var currentNode = this.head
     if (!currentNode) {
       return null
@@ -74,7 +73,6 @@ export default class LinkedList {
   }
 
   find(data) {
-    var node = new Node(data)
     var currentNode = this.head
     if (!currentNode) {
       return null
@@ -86,6 +84,80 @@ export default class LinkedList {
         currentNode = currentNode.next
       }
     } return -1
+  }
+
+  findByNext(data) {
+    let currentNode = this.head
+
+    if(!currentNode) {
+      return null
+    } else if (!currentNode.next && currentNode.data === data){
+      return clear()
+    } else {
+      while(currentNode.next){
+        if(currentNode.next.data === data){
+          return currentNode
+        } else {
+          currentNode = currentNode.next
+        }
+      } return null
+    }
+  }
+
+  removeWithFind(data) {
+    let currentNode = this.head
+    const findByNext = function(data) {
+
+      if(!currentNode) {
+        return null
+      } else if (!currentNode.next && currentNode.data === data){
+        return clear()
+      } else {
+        while(currentNode.next){
+          if(currentNode.next.data === data){
+            return currentNode
+          } else {
+            currentNode = currentNode.next
+          }
+        } return null
+      }
+    }
+
+    let foundNode = findByNext(data)
+      if (foundNode === null){
+        return null
+      } else {
+        foundNode.next = foundNode.next.next
+        return this.length--
+      }
+  }
+
+  removeBy(data) {
+    let currentNode = this.head
+
+    if(!currentNode){
+      return null
+    } else {
+      while(currentNode){
+        if(currentNode.data === data){
+          if(!currentNode.next){
+            this.head = null
+            return this.length--
+          } else {
+            currentNode = currentNode.next
+            this.length--
+            return this.head = currentNode
+          }
+        } else if (currentNode.next.data === data){
+          currentNode.next = currentNode.next.next
+          return this.length--
+        } else if (currentNode.next !== null){
+          currentNode = currentNode.next
+        } else {
+          return alert("no such node exists")
+        }
+      }
+    }
   }
 
   insertAfter(searchTerm, data) {
@@ -151,7 +223,6 @@ export default class LinkedList {
   }
 
   remove() {
-    var node = new Node()
     var currentNode = this.head
     if (!currentNode || !currentNode.next){
       return null
