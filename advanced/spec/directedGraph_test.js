@@ -72,8 +72,10 @@ describe.only('DirectedGraph', () => {
   })
 
   context('visit(v1, vertex => console.log(vertex))', () => {
-    const dg = new DirectedGraph()
-    //i am not yet sure how to test console logs?
+    it('does some really weird shit', () => {
+      const dg = new DirectedGraph()
+      //i am not yet sure how to test console logs?
+    })
   })
 
   context('findPaths(V1, V2)', () => {
